@@ -20,6 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".login.LoginActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop"/>
     </application>
 
 </manifest>

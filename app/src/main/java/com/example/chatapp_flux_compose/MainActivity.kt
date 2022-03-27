@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.chatapp_flux_compose.login.LoginActivity
 import com.example.chatapp_flux_compose.ui.theme.ChatApp_Flux_ComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,14 +23,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             ChatApp_Flux_ComposeTheme {
                 Surface {
-                    MainActivityScreen()
+                    MainActivityScreen {
+                        startActivity(LoginActivity.createIntent(applicationContext))
+                    }
                 }
             }
         }
     }
+
 }
 
 @Composable
-private fun MainActivityScreen() {
-    AllChatsScreen()
+private fun MainActivityScreen(onClickGoLoginScreenListener: () -> Unit) {
+    AllChatsScreen(onClickGoLoginScreenListener)
 }
