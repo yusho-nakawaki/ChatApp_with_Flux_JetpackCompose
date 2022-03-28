@@ -64,6 +64,23 @@ fun LoginScreen(
                     .size(30.dp)
                     .clip(CircleShape)
             )
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Row (
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+
+                Text(text = "ユーザー名:", fontSize = 15.sp)
+
+                val (userName, setUserName) = rememberSaveable { mutableStateOf("") }
+                TextField(
+                    value = userName,
+                    onValueChange = setUserName,
+                    modifier = Modifier.size(200.dp, 50.dp)
+                )
+            }
         }
     }
 }
