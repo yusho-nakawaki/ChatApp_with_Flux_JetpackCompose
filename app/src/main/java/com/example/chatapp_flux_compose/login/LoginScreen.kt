@@ -7,11 +7,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.chatapp_flux_compose.data.UserData
 
 @Composable
 fun LoginScreen(
     onUserIconTap: () -> Unit,
-    onCreateAccount: () -> Unit,
+    onCreateAccount: (UserData) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -28,6 +29,12 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(60.dp))
 
-        CreateAccountButton(onCreateAccount)
+        CreateAccountButton(
+            onCreateAccount = {
+                if (userName.isNotEmpty()) {
+                    onCreateAccount.invoke(UserData(userName, ""))
+                }
+            }
+        )
     }
 }
