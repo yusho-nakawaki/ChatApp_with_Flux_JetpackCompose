@@ -31,5 +31,12 @@ class LoginActivity : ComponentActivity() {
 
 @Composable
 private fun LoginActivityScreen() {
-    LoginScreen()
+    LoginScreen(
+        onUserIconTap = {
+
+        },
+        onCreateAccount = {
+
+        }
+    )
 }

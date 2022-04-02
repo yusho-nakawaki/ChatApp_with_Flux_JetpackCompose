@@ -23,7 +23,7 @@ import com.example.chatapp_flux_compose.R
 
 @Composable
 fun UserIcon(
-
+    onUserIconTap: () -> Unit,
 ) {
     Box (
         modifier = Modifier.size(120.dp),
@@ -41,7 +41,7 @@ fun UserIcon(
                 )
                 .fillMaxSize()
                 .clip(CircleShape)
-                .clickable { /* Todo */ }
+                .clickable { onUserIconTap.invoke() }
         )
         Image(
             painter = painterResource(R.drawable.ic_plus_circle_black),
@@ -54,7 +54,7 @@ fun UserIcon(
 }
 
 @Composable
-fun userNameTextField(
+fun UserNameTextField(
     userName: String,
     onUserNameChanged: (String) -> Unit,
 ) {
@@ -75,10 +75,10 @@ fun userNameTextField(
 
 @Composable
 fun CreateAccountButton (
-
+    onCreateAccount: () -> Unit,
 ) {
     Button(
-        onClick = { /*TODO*/ },
+        onClick = { onCreateAccount.invoke() },
         modifier = Modifier
             .wrapContentHeight()
             .width(200.dp)
