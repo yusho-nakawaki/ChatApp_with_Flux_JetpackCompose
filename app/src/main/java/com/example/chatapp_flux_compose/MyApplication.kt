@@ -3,10 +3,10 @@ package com.example.chatapp_flux_compose
 import android.app.Application
 import com.example.chatapp_flux_compose.data.preference.UserPreference
 import com.example.chatapp_flux_compose.data.preference.UserPreferenceImpl
-import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-open class MyApplication : Application() {
+class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -17,7 +17,9 @@ open class MyApplication : Application() {
     // DIで必要
     private fun setupKoin() {
         startKoin {
-            modules(myModule)
+            modules(
+                listOf(myModule)
+            )
         }
     }
 
@@ -27,6 +29,6 @@ open class MyApplication : Application() {
      viewModel: ViewModelのモジュール宣言で使用する
      */
     private val myModule = module {
-        single<UserPreference> { UserPreferenceImpl(get()) }
+        single<UserPreference> { UserPreferenceImpl(applicationContext) } // NOTE なぜget()ではクラッシュするのか
     }
 }

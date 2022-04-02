@@ -1,18 +1,17 @@
 package com.example.chatapp_flux_compose.data.preference
 
 import android.content.Context
-import androidx.compose.ui.input.key.Key
 
 class UserPreferenceImpl(override val context: Context) : UserPreference {
     override val preferenceName = "UserPref"
 
-    override var USER_ID: String
+    override var userId: String
         get() = read(Keys.USER_ID, "")
         set(value) = put(Keys.USER_ID, value)
-    override var USER_NAME: String
+    override var userName: String
         get() = read(Keys.USER_NAME, "")
         set(value) = put(Keys.USER_NAME, value)
-    override var USER_ICON_URL: String
+    override var userIconUrl: String
         get() = read(Keys.USER_ICON_URL, "")
         set(value) = put(Keys.USER_ICON_URL, value)
 
