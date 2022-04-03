@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,16 +23,17 @@ import com.example.chatapp_flux_compose.R
 
 @Composable
 fun UserIcon(
+    imageBitmap: ImageBitmap,
     onUserIconTap: () -> Unit,
 ) {
     Box (
         modifier = Modifier.size(120.dp),
         contentAlignment = Alignment.BottomEnd
     ) {
-        val imageBitMap = ImageBitmap.imageResource(R.drawable.ic_not_set_icon)
         Image(
-            bitmap = imageBitMap,
+            bitmap = imageBitmap,
             contentDescription = "this image will be used in icon image",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .border(
                     width = 2.dp,
