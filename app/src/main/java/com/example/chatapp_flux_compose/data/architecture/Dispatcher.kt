@@ -1,4 +1,4 @@
-package com.dena.mirrativ.architecture
+package com.example.chatapp_flux_compose.data.architecture
 
 import android.util.Log
 import com.example.chatapp_flux_compose.BuildConfig
