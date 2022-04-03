@@ -14,6 +14,7 @@ import org.koin.android.ext.android.inject
 class LoginActivity : ComponentActivity() {
 
     private val userPreference: UserPreference by inject()
+    private val actionCreator: LoginActionCreator by inject()
 
     companion object {
         fun createIntent(context: Context): Intent {
@@ -33,6 +34,7 @@ class LoginActivity : ComponentActivity() {
                         },
                         onCreateAccount = { userData ->
                             println("before userPref")
+                            actionCreator.hoge()
                             userPreference.userName = userData.userName
                             println("aaaa: ${userPreference.userName}")
                         }
