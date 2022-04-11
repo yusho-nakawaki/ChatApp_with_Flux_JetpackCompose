@@ -1,5 +1,6 @@
 package com.example.chatapp_flux_compose.login
 
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -19,7 +20,7 @@ import com.example.chatapp_flux_compose.data.UserData
 
 @Composable
 fun LoginScreen(
-    onUserIconTap: () -> Unit,
+    onUserIconTap: (ImageBitmap) -> Unit,
     onCreateAccount: (UserData) -> Unit,
 ) {
     Column(
@@ -35,6 +36,7 @@ fun LoginScreen(
             uri?.let {
                 val source = ImageDecoder.createSource(context.contentResolver,it)
                 imageBitmap = ImageDecoder.decodeBitmap(source).asImageBitmap()
+                onUserIconTap.invoke(imageBitmap)
             }
         }
         UserIcon(

@@ -29,14 +29,11 @@ class LoginActivity : ComponentActivity() {
             ChatApp_Flux_ComposeTheme {
                 Surface {
                     LoginScreen(
-                        onUserIconTap = {
-
+                        onUserIconTap = { userIcon ->
+                            actionCreator.uploadUserIconToStorage(userIcon)
                         },
                         onCreateAccount = { userData ->
-                            println("before userPref")
-                            actionCreator.hoge()
                             userPreference.userName = userData.userName
-                            println("aaaa: ${userPreference.userName}")
                         }
                     )
                 }
