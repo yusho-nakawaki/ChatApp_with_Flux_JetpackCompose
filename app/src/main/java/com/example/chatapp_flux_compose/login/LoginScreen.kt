@@ -1,14 +1,16 @@
 package com.example.chatapp_flux_compose.login
 
-import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -23,42 +25,59 @@ fun LoginScreen(
     onUserIconTap: (ImageBitmap) -> Unit,
     onCreateAccount: (UserData) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
+    Box {
+        var isLoading by remember { mutableStateOf(false) }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
 
-        val context = LocalContext.current
-        val initialImageBitmap = ImageBitmap.imageResource(id = R.drawable.ic_not_set_icon)
-        var imageBitmap by remember { mutableStateOf(initialImageBitmap) }
-        val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                val source = ImageDecoder.createSource(context.contentResolver,it)
-                imageBitmap = ImageDecoder.decodeBitmap(source).asImageBitmap()
-                onUserIconTap.invoke(imageBitmap)
-            }
-        }
-        UserIcon(
-            imageBitmap,
-            onUserIconTap = { launcher.launch("image/*") }
-        )
+            val context = LocalContext.current
+            val initialImageBitmap = ImageBitmap.imageResource(id = R.drawable.ic_not_set_icon)
+            var imageBitmap by remember { mutableStateOf(initialImageBitmap) }
 
-        Spacer(modifier = Modifier.height(40.dp))
-
-        val (userName, setUserName) = remember { mutableStateOf("") }
-        UserNameTextField(userName, setUserName)
-
-        Spacer(modifier = Modifier.height(60.dp))
-
-        CreateAccountButton(
-            onCreateAccount = {
-                if (userName.isNotEmpty()) {
-                    onCreateAccount.invoke(UserData(userName, ""))
+            val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                uri?.let {
+                    val source = ImageDecoder.createSource(context.contentResolver,it)
+                    imageBitmap = ImageDecoder.decodeBitmap(source).asImageBitmap()
+                    isLoading = true
+                    onUserIconTap.invoke(imageBitmap)
                 }
             }
-        )
+            UserIcon(
+                imageBitmap,
+                onUserIconTap = { launcher.launch("image/*") }
+            )
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            val (userName, setUserName) = remember { mutableStateOf("") }
+            UserNameTextField(userName, setUserName)
+
+            Spacer(modifier = Modifier.height(60.dp))
+
+            CreateAccountButton(
+                onCreateAccount = {
+                    if (userName.isNotEmpty()) {
+                        onCreateAccount.invoke(UserData(userName, ""))
+                    }
+                }
+            )
+        }
+
+        if (isLoading) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color(0x22000000))
+            ) {
+                CircularProgressIndicator(color = Color.DarkGray)
+            }
+        }
     }
+
 }
 
 @Preview
