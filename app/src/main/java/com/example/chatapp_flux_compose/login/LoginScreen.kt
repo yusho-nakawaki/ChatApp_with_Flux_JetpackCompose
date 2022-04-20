@@ -21,6 +21,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.example.chatapp_flux_compose.R
 import com.example.chatapp_flux_compose.data.UserData
 import com.example.chatapp_flux_compose.data.general.StatusState
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
 import org.koin.androidx.compose.getViewModel
@@ -28,13 +29,16 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun LoginScreen(
     onUserIconTap: (ImageBitmap) -> Unit,
-    onCreateAccount: (UserData) -> Unit,
+    onCreateAccount: (String) -> Unit,
+    onRegisterBasicUserInfoSucceed: (Unit) -> Unit,
     store: LoginStore,
 ) {
 
     LaunchedEffect(Unit) {
         launch {
-//            store.statusState
+            store.registerBasicUserInfoSucceed.collect {
+                onRegisterBasicUserInfoSucceed.invoke(it)
+            }
         }
     }
 
@@ -73,7 +77,7 @@ fun LoginScreen(
             CreateAccountButton(
                 onCreateAccount = {
                     if (userName.isNotEmpty()) {
-                        onCreateAccount.invoke(UserData(userName, ""))
+                        onCreateAccount.invoke(userName)
                     }
                 }
             )

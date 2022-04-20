@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.chatapp_flux_compose.data.architecture.Dispatcher
 import com.example.chatapp_flux_compose.data.general.StatusState
 import com.example.chatapp_flux_compose.data.preference.UserPreference
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -21,6 +18,9 @@ class LoginStore(
 ) : ViewModel(), CoroutineScope {
 
     override val coroutineContext: CoroutineContext = Dispatchers.Main + Job()
+
+    private val mutableRegisterBasicUserInfoSucceed = MutableSharedFlow<Unit>()
+    val registerBasicUserInfoSucceed: SharedFlow<Unit> = mutableRegisterBasicUserInfoSucceed
 
     private val mutableStatusState = MutableStateFlow<StatusState>(StatusState.None)
     val statusState: StateFlow<StatusState> = mutableStatusState
@@ -45,6 +45,15 @@ class LoginStore(
     fun on(event: LoginActionEvent.UploadUserIconFailed) {
         mutableStatusState.value = StatusState.Error(event.errorMessage ?: "error")
     }
+
+    @Subscribe
+    fun on(event: LoginActionEvent.RegisterBasicUserInfoSucceed) {
+        launch {
+            mutableRegisterBasicUserInfoSucceed.emit(Unit)
+        }
+    }
+
+
 
     @Subscribe
     fun on(event: LoginActionEvent.LoadingStatusState) {

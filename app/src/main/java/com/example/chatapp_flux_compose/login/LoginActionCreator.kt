@@ -47,8 +47,12 @@ class LoginActionCreator(
         )
         db.collection("basic_user_info").document(userPreference.userId)
             .set(data)
-            .addOnSuccessListener {  }
-            .addOnFailureListener {  }
+            .addOnSuccessListener {
+                dispatcher.dispatch(LoginActionEvent.RegisterBasicUserInfoSucceed)
+            }
+            .addOnFailureListener {
+                dispatcher.dispatch(LoginActionEvent.RegisterBasicUserInfoFailed(it.message))
+            }
     }
 
     private fun createUid() {

@@ -33,8 +33,11 @@ class LoginActivity : ComponentActivity() {
                         onUserIconTap = { userIcon ->
                             actionCreator.uploadUserIconToStorage(userIcon)
                         },
-                        onCreateAccount = { userData ->
-                            userPreference.userName = userData.userName
+                        onCreateAccount = { userName ->
+                            actionCreator.registerUserInfoToFirestore(userName = userName)
+                        },
+                        onRegisterBasicUserInfoSucceed = {
+                            finish()
                         },
                         store = loginStore,
                     )
