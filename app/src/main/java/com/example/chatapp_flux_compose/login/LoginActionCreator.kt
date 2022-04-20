@@ -16,6 +16,7 @@ class LoginActionCreator(
 ) {
 
     fun uploadUserIconToStorage(userIcon: ImageBitmap) {
+        dispatcher.dispatch(LoginActionEvent.LoadingStatusState)
         if (userPreference.userId == "") createUid()
 
         val bitmap = userIcon.asAndroidBitmap()
@@ -26,12 +27,11 @@ class LoginActionCreator(
         val storageRef = Firebase.storage.reference
         val iconRef = storageRef.child("${userPreference.userId}/icon_image.jpg")
         val uploadTask = iconRef.putBytes(data)
-        uploadTask.addOnFailureListener {
-
-        }.addOnSuccessListener { taskSnapshot ->
+        uploadTask.addOnSuccessListener { taskSnapshot ->
             val iconUrl = taskSnapshot.uploadSessionUri.toString()
-            userPreference.userIconUrl = iconUrl
-            println("aaaaa: succeed!!")
+            dispatcher.dispatch(LoginActionEvent.UploadUserIconSucceed(iconUrl))
+        }.addOnFailureListener {
+            dispatcher.dispatch(LoginActionEvent.UploadUserIconFailed(it.message))
         }
     }
 

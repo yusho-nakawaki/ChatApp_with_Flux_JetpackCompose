@@ -34,6 +34,6 @@ class MyApplication : Application() {
         single { com.example.chatapp_flux_compose.data.architecture.Dispatcher() }
         single<UserPreference> { UserPreferenceImpl(applicationContext) } // NOTE なぜget()ではクラッシュするのか
         single { LoginActionCreator(get(), get()) } // NOTE DispatcherをmyModuleに定義したらget()できた
-        single { LoginStore(get()) }
+        single { LoginStore(get(), get()) }
     }
 }

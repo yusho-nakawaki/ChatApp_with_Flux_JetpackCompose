@@ -14,6 +14,7 @@ import org.koin.android.ext.android.inject
 class LoginActivity : ComponentActivity() {
 
     private val userPreference: UserPreference by inject()
+    private val loginStore: LoginStore by inject()
     private val actionCreator: LoginActionCreator by inject()
 
     companion object {
@@ -34,22 +35,11 @@ class LoginActivity : ComponentActivity() {
                         },
                         onCreateAccount = { userData ->
                             userPreference.userName = userData.userName
-                        }
+                        },
+                        store = loginStore,
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-private fun LoginActivityScreen() {
-    LoginScreen(
-        onUserIconTap = {
-
-        },
-        onCreateAccount = { userData ->
-
-        }
-    )
 }

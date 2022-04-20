@@ -17,16 +17,30 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import com.example.chatapp_flux_compose.R
 import com.example.chatapp_flux_compose.data.UserData
+import com.example.chatapp_flux_compose.data.general.StatusState
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.get
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun LoginScreen(
     onUserIconTap: (ImageBitmap) -> Unit,
     onCreateAccount: (UserData) -> Unit,
+    store: LoginStore,
 ) {
+
+    LaunchedEffect(Unit) {
+        launch {
+//            store.statusState
+        }
+    }
+
+    val statusState = store.statusState.collectAsState()
+
     Box {
-        var isLoading by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -41,7 +55,6 @@ fun LoginScreen(
                 uri?.let {
                     val source = ImageDecoder.createSource(context.contentResolver,it)
                     imageBitmap = ImageDecoder.decodeBitmap(source).asImageBitmap()
-                    isLoading = true
                     onUserIconTap.invoke(imageBitmap)
                 }
             }
@@ -66,7 +79,7 @@ fun LoginScreen(
             )
         }
 
-        if (isLoading) {
+        if (statusState.value.isLoading) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
@@ -83,5 +96,5 @@ fun LoginScreen(
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(onUserIconTap = { /*TODO*/ }, onCreateAccount = {})
+//    LoginScreen(onUserIconTap = { /*TODO*/ }, onCreateAccount = {})
 }
