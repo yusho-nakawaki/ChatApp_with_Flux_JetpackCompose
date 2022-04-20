@@ -53,7 +53,10 @@ class LoginStore(
         }
     }
 
-
+    @Subscribe
+    fun on(event: LoginActionEvent.RegisterBasicUserInfoFailed) {
+        mutableStatusState.value = StatusState.Error(event.errorMessage ?: "error")
+    }
 
     @Subscribe
     fun on(event: LoginActionEvent.LoadingStatusState) {

@@ -2,6 +2,7 @@ package com.example.chatapp_flux_compose.login
 
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -42,8 +43,6 @@ fun LoginScreen(
         }
     }
 
-    val statusState = store.statusState.collectAsState()
-
     Box {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -83,22 +82,25 @@ fun LoginScreen(
             )
         }
 
-        if (statusState.value.isLoading) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color(0x22000000))
-            ) {
-                CircularProgressIndicator(color = Color.DarkGray)
+
+        val statusState = store.statusState.collectAsState()
+        when (statusState.value) {
+            is StatusState.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = Color(0x22000000))
+                ) {
+                    CircularProgressIndicator(color = Color.DarkGray)
+                }
             }
+            is StatusState.Error -> {
+                val context = LocalContext.current
+                Toast.makeText(context, (statusState.value as StatusState.Error).errorMessage, Toast.LENGTH_SHORT).show()
+            }
+            else -> {}
         }
     }
 
-}
-
-@Preview
-@Composable
-fun LoginScreenPreview() {
-//    LoginScreen(onUserIconTap = { /*TODO*/ }, onCreateAccount = {})
 }
