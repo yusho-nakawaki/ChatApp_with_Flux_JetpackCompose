@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import com.example.chatapp_flux_compose.data.architecture.Dispatcher
 import com.example.chatapp_flux_compose.data.preference.UserPreference
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
@@ -33,6 +34,21 @@ class LoginActionCreator(
         }.addOnFailureListener {
             dispatcher.dispatch(LoginActionEvent.UploadUserIconFailed(it.message))
         }
+    }
+
+    fun registerUserInfoToFirestore(userName: String) {
+        dispatcher.dispatch(LoginActionEvent.LoadingStatusState)
+        if (userPreference.userId == "") createUid()
+
+        val db = Firebase.firestore
+        val data = hashMapOf(
+            "name" to userName,
+            "iconUrl" to userPreference.userIconUrl
+        )
+        db.collection("basic_user_info").document(userPreference.userId)
+            .set(data)
+            .addOnSuccessListener {  }
+            .addOnFailureListener {  }
     }
 
     private fun createUid() {
