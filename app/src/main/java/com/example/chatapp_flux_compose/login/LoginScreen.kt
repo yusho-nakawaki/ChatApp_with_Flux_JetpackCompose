@@ -38,6 +38,19 @@ fun LoginScreen(
         }
     }
 
+    val statusState = store.statusState.collectAsState()
+    val initialImageBitmap = ImageBitmap.imageResource(id = R.drawable.ic_not_set_icon)
+    var imageBitmap by remember { mutableStateOf(initialImageBitmap) }
+
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            val source = ImageDecoder.createSource(context.contentResolver,it)
+            imageBitmap = ImageDecoder.decodeBitmap(source).asImageBitmap()
+            onUserIconTap.invoke(imageBitmap)
+        }
+    }
+
     Box {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -45,17 +58,6 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
         ) {
 
-            val context = LocalContext.current
-            val initialImageBitmap = ImageBitmap.imageResource(id = R.drawable.ic_not_set_icon)
-            var imageBitmap by remember { mutableStateOf(initialImageBitmap) }
-
-            val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                uri?.let {
-                    val source = ImageDecoder.createSource(context.contentResolver,it)
-                    imageBitmap = ImageDecoder.decodeBitmap(source).asImageBitmap()
-                    onUserIconTap.invoke(imageBitmap)
-                }
-            }
             UserIcon(
                 imageBitmap,
                 onUserIconTap = { launcher.launch("image/*") }
@@ -77,8 +79,6 @@ fun LoginScreen(
             )
         }
 
-
-        val statusState = store.statusState.collectAsState()
         when (statusState.value) {
             is StatusState.Loading -> {
                 Box(
@@ -91,7 +91,6 @@ fun LoginScreen(
                 }
             }
             is StatusState.Error -> {
-                val context = LocalContext.current
                 Toast.makeText(context, (statusState.value as StatusState.Error).errorMessage, Toast.LENGTH_SHORT).show()
             }
             else -> {}
